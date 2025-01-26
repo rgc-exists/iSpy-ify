@@ -143,7 +143,7 @@ class $modify(PlayLayer) {
 
 		if (blinking) {
 			resetBlinking();
-			blinkingTimer = INT_MAX;
+			blinkingTimer = 9999;
 		}
 	}
 
@@ -151,7 +151,7 @@ class $modify(PlayLayer) {
 		PlayLayer::onQuit();
 		eyeClosed = false;
 		blinking = false;
-		blinkingTimer = INT_MAX;
+		blinkingTimer = 9999;
 		overlaySprite = nullptr;
 	}
 
