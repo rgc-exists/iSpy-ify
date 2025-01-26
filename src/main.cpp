@@ -49,8 +49,6 @@ class $modify(CCSprite) {
 				}
 			}
 
-			ccColor3B curColor = getColor();
-
 			ccColor3B newColor = randColor();
 			setColor(newColor);
 			updateDisplayedColor(newColor);
