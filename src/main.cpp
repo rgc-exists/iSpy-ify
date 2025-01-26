@@ -217,8 +217,7 @@ $execute{
 					}
 				}
 			);
-
-			return ListenerResult::Stop;
 		}
+		return ListenerResult::Stop;
 	});
 }
