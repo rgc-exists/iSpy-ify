@@ -1,0 +1,2 @@
+# iSpy-ify
+Turns every level/menu into eye-bleeding brain candy like the hit level iSpyWithMyLittleEye by Voxicat!!! Also includes some funny "eye closing/opening" sections that randomly spawn as you play. :)
