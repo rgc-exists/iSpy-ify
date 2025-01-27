@@ -10,3 +10,6 @@ Also includes some funny "eye closing/opening" sections that randomly spawn as y
 # The Blinking Eye (optional)
 There is a feature where an eye appears and the level gets dark as it blinks (like that one part part in iSpy.)  
 ***You can disable that in the settings of the mod, just like any other setting for any Geode mod.***
+
+# iSpy Demon List
+We have an official [iSpy-ify DEMON LIST](https://rgc-exists.github.io/ispy-demon-list/) for levels beaten with this mod!
