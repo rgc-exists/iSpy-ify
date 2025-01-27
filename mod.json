@@ -1,10 +1,7 @@
 {
 	"geode": "4.2.0",
 	"gd": {
-		"win": "2.2074",
-		"android": "2.2074",
-		"mac": "2.2074",
-		"ios": "2.2074"
+		"win": "2.2074"
 	},
 	"id": "rgc_exists.ispy-ify",
 	"name": "iSpy-ify (EPILEPSY WARN!)",
@@ -12,6 +9,7 @@
 	"developer": "RGC Exists",
 	"description": "Turns every level/menu into eye-bleeding brain candy like the hit level iSpyWithMyLittleEye by Voxicat!!! Also includes some funny \"eye closing/opening\" sections that randomly spawn as you play. :)",
 	"tags": [ "offline", "universal", "joke" ],
+	"links": { "source": "https://github.com/rgc-exists/iSpy-ify" },
 	"resources": {
 		"sprites": [
 			"resources/blinking_eye/*.png"
