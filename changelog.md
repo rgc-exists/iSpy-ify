@@ -1,5 +1,5 @@
 # 1.0.5
-- Make it so the blinking eye slowly moves into the screen before blinking, so you know it's coming.
+- Make it so the blinking eye slowly moves into the screen before blinking, so you know it's coming.  
 (Note that this is the first version released on the Geode index.)
 
 # 1.0.4
