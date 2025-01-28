@@ -1,8 +1,7 @@
 {
 	"geode": "4.2.0",
 	"gd": {
-		"win": "2.2074",
-		"android": "2.2074"
+		"win": "2.2074"
 	},
 	"id": "rgc_exists.ispy-ify",
 	"name": "iSpy-ify (EPILEPSY WARN!)",
