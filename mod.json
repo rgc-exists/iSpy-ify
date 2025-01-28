@@ -19,6 +19,17 @@
 		]
 	},
 	"settings": {
+		"mod-enabled": {
+			"type": "bool",
+			"name": "Mod Enabled",
+			"description": "Enable/disable the flashing as a whole.",
+			"default": true
+		},
+		"demon-list-ban-title": {
+			"type": "title",
+			"name": "Banned from the iSpy Demon List",
+			"description": "The \"Blinking Eye Enabled\" setting MUST be on for your verification/record to be accepted."
+		},
 		"blinking-eye-enabled": {
 			"type": "bool",
 			"name": "Blinking Eye Enabled",

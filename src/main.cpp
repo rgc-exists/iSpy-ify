@@ -202,8 +202,16 @@ class $modify(GameObjHook, GameObject) {
 
 
 $execute{
-	new EventListener<EventFilter<GameEvent>>(+[](GameEvent* ev) {
 
+	listenForSettingChanges("mod-enabled", [](bool value) {
+		flashingEnabled = value;
+	});
+
+	new EventListener<EventFilter<GameEvent>>(+[](GameEvent* ev) {
+		if (!Mod::get()->getSettingValue<bool>("mod-enabled")) {
+			flashingEnabled = false;
+			return ListenerResult::Stop;
+		}
 		if (ev->getType() == GameEventType::Loaded) {
 			geode::createQuickPopup(
 				"EPILEPSY WARNING!!!",
