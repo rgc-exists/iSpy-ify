@@ -37,7 +37,7 @@
 			"type": "bool",
 			"name": "Blinking Eye Disabled",
 			"description": "Disables the feature where an eye appears and the level gets dark as it blinks (like the part in iSpy.)",
-			"default": true
+			"default": false
 		}
 	}
 }
