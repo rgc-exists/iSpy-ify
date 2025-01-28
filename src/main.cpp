@@ -18,6 +18,7 @@ static bool blinkingEyeEnabled = true;
 static CCSprite* blinkingEye;
 static float blinkingTimer = 9999;
 static bool blinking = false;
+static bool eyeAppearing = false;
 static bool eyeClosed = false;
 static const char* blinkAnimation[8] = { "1.png"_spr, "2.png"_spr, "3.png"_spr, "4.png"_spr, "5.png"_spr, "5.png"_spr, "5.png"_spr, "5.png"_spr };
 static CCSprite* overlaySprite;
@@ -86,26 +87,37 @@ class $modify(PlayLayer) {
 			}
 
 
+			CCSize winSize = CCDirector::sharedDirector()->getWinSize();
 			if (!blinking) {
 				if (!overlaySprite) return;
 				if (blinkingTimer <= 0 && blinkingEyeEnabled && !m_fields->m_levelIsPlatformer) {
 					blinking = true;
+					eyeAppearing = true;
 					blinkingEye = CCSprite::create("1.png"_spr);
 					UILayer::get()->addChild(blinkingEye);
-					blinkingEye->setPosition(CCDirector::sharedDirector()->getWinSize() * .75f);
 					blinkingEye->setScale(2);
+					auto frame = CCTextureCache::sharedTextureCache()->addImage("5.png"_spr, true);
+					blinkingEye->setTexture(frame);
 
 					overlaySprite->setOpacity((rand() % 50) + 175);
-					FMODAudioEngine::get()->playEffect("iSpy_Blinking.wav"_spr);
 				}
 			}
-			else {
-				int animIndex = abs(fmodf(ceilf(blinkingTimer * 8) / 8, 7));
+			else if (eyeAppearing) {
+				float heightOffset = blinkingTimer + 21;
+				blinkingEye->setPosition(ccp(winSize.width * .75f, winSize.height * .75f + heightOffset * 6.5f));
+				log::debug("{}", heightOffset);
+				if (heightOffset < 0) {
+					eyeAppearing = false;
+					FMODAudioEngine::get()->playEffect("iSpy_Blinking.wav"_spr);
+				}
+			} else {
+				int animIndex = abs(fmodf(ceilf(blinkingTimer * 8) / 8 - 64, 7));
 				auto frame = CCTextureCache::sharedTextureCache()->addImage(blinkAnimation[animIndex], true);
 				blinkingEye->setTexture(frame);
+				blinkingEye->setPosition(winSize * .75f);
 				eyeClosed = (animIndex > 3);
 
-				if (blinkingTimer <= -64) {
+				if (blinkingTimer <= -64 - 21) {
 					blinkingEye->removeFromParentAndCleanup(true);
 					resetBlinking();
 				}
@@ -134,15 +146,6 @@ class $modify(PlayLayer) {
 		overlaySprite->setColor(ccc3(0, 0, 0));
 		overlaySprite->setVisible(false);
 
-	}
-
-	void levelComplete() {
-		PlayLayer::levelComplete();
-
-		if (blinking) {
-			resetBlinking();
-			blinkingTimer = INT_MAX;
-		}
 	}
 
 	void onQuit() {
