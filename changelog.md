@@ -1,6 +1,9 @@
+# 1.0.6
+- Add android support
+(Note that this is the first version released on the Geode index.)
+
 # 1.0.5
 - Make it so the blinking eye slowly moves into the screen before blinking, so you know it's coming.  
-(Note that this is the first version released on the Geode index.)
 
 # 1.0.4
 - Make one singular change to the about.md file (I need to change the version number to update my submission to the Geode index.)
