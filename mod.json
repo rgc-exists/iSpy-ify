@@ -5,7 +5,7 @@
 	},
 	"id": "rgc_exists.ispy-ify",
 	"name": "iSpy-ify (EPILEPSY WARN!)",
-	"version": "v1.0.2",
+	"version": "v1.0.3",
 	"developer": "RGC Exists",
 	"description": "Turns every level/menu into eye-bleeding brain candy like the hit level iSpyWithMyLittleEye by Voxicat!!! Also includes some funny \"eye closing/opening\" sections that randomly spawn as you play. :)",
 	"tags": [ "offline", "universal", "joke" ],
@@ -33,10 +33,10 @@
 			"name": "Banned from the iSpy Demon List",
 			"description": "The \"Blinking Eye Enabled\" setting MUST be on for your verification/record to be accepted."
 		},
-		"blinking-eye-enabled": {
+		"blinking-eye-disabled": {
 			"type": "bool",
-			"name": "Blinking Eye Enabled",
-			"description": "Enables the feature where an eye appears and the level gets dark as it blinks (like the part in iSpy.)",
+			"name": "Blinking Eye Disabled",
+			"description": "Disables the feature where an eye appears and the level gets dark as it blinks (like the part in iSpy.)",
 			"default": true
 		}
 	}

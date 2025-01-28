@@ -121,7 +121,7 @@ class $modify(PlayLayer) {
 
 		if (blinking) return;
 
-		blinkingEyeEnabled = Mod::get()->getSettingValue<bool>("blinking-eye-enabled");
+		blinkingEyeEnabled = !(Mod::get()->getSettingValue<bool>("blinking-eye-disabled"));
 
 		blinkingTimer = rand() % 30 * 14 + 14;
 
@@ -203,9 +203,13 @@ class $modify(GameObjHook, GameObject) {
 
 $execute{
 
+	listenForSettingChanges("blinking-eye-disabled", [](bool value) {
+		blinkingEyeEnabled = !value;
+	});
 	listenForSettingChanges("mod-enabled", [](bool value) {
 		flashingEnabled = value;
 	});
+
 
 	new EventListener<EventFilter<GameEvent>>(+[](GameEvent* ev) {
 		if (!Mod::get()->getSettingValue<bool>("mod-enabled")) {
