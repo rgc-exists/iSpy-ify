@@ -1,5 +1,6 @@
 # 1.0.2
 - Add setting to turn the mod off without restarting your game.
+- Add discord link
 (Note that this is the first version released on the Geode index.)
 
 # 1.0.1
