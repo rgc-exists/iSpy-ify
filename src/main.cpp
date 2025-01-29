@@ -40,22 +40,6 @@ static ccHSVValue randColorHSV(float sat = 255, float bright = 255, float absSat
 	return hsv;
 }
 
-class $modify(CCSprite) {
-	virtual void draw() {
-		if (flashingEnabled) {
-			if (getID() == "background") {
-				ccColor3B newColor = randColor();
-				setColor(newColor);
-				updateDisplayedColor(newColor);
-
-				CCNodeRGBA* node = (CCNodeRGBA*)this;
-				node->setColor(newColor);
-				node->updateDisplayedColor(newColor);
-			}
-		}
-		CCSprite::draw();
-	}
-};
 
 static void colorChildrenRecursive(CCNode* node, ccColor3B color) {
 	CCSprite* sprite = dynamic_cast<CCSprite*>(node);
@@ -100,6 +84,12 @@ class $modify(PlayLayer) {
 			if (gameLayer->m_groundLayer && gameLayer->m_groundLayer) {
 				colorChildrenRecursive(gameLayer->m_groundLayer, randColor());
 				colorChildrenRecursive(gameLayer->m_groundLayer2, randColor());
+				CCSprite* ground = gameLayer->m_groundLayer;
+				CCNode* background = ground->getParent()->getChildByID("background");
+				CCSprite* backgroundSpr = dynamic_cast<CCSprite*>(background);
+				ccColor3B bgColor = randColor();
+				backgroundSpr->setColor(color);
+				backgroundSpr->updateDisplayedColor(color);
 			}
 
 			CCSize winSize = CCDirector::sharedDirector()->getWinSize();
