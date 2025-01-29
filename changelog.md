@@ -1,5 +1,6 @@
 # 1.0.6
-- Remove color flashing for menus, only have it for in-game objects.  
+- Remove color flashing for menus, only have it for in-game objects.
+- Add color flashing for ground.
 (Note that this is the first version released on the Geode index.)
 
 # 1.0.5

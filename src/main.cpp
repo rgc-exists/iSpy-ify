@@ -5,10 +5,11 @@ using namespace geode::prelude;
 #include <Geode/modify/CCSprite.hpp>
 #include <Geode/modify/PlayLayer.hpp>
 #include <Geode/modify/GameObject.hpp>
+#include <Geode/modify/GJGroundLayer.hpp>
 #include <Geode/loader/Event.hpp>
 #include <Geode/loader/GameEvent.hpp> 
 
-#include "colors.cpp"
+#include "colors.hpp"
 
 #include <math.h>
 
@@ -39,20 +40,37 @@ static ccHSVValue randColorHSV(float sat = 255, float bright = 255, float absSat
 	return hsv;
 }
 
-class $modify(CCSpriteHook, CCSprite) {
+class $modify(CCSprite) {
 	virtual void draw() {
-		if (getID() == "background") {
-			ccColor3B newColor = randColor();
-			setColor(newColor);
-			updateDisplayedColor(newColor);
+		if (flashingEnabled) {
+			if (getID() == "background") {
+				ccColor3B newColor = randColor();
+				setColor(newColor);
+				updateDisplayedColor(newColor);
 
-			CCNodeRGBA* node = (CCNodeRGBA*)this;
-			node->setColor(newColor);
-			node->updateDisplayedColor(newColor);
+				CCNodeRGBA* node = (CCNodeRGBA*)this;
+				node->setColor(newColor);
+				node->updateDisplayedColor(newColor);
+			}
 		}
 		CCSprite::draw();
 	}
 };
+
+static void colorChildrenRecursive(CCNode* node, ccColor3B color) {
+	CCSprite* sprite = dynamic_cast<CCSprite*>(node);
+
+	if (sprite) {
+		sprite->setColor(color);
+		sprite->updateDisplayedColor(color);
+	}
+
+	for (int c = 0; c < node->getChildrenCount(); c++) {
+		CCObject* child = node->getChildren()->objectAtIndex(c);
+		CCNode* childNode = (CCNode*)child;
+		colorChildrenRecursive(childNode, color);
+	}
+}
 
 class $modify(PlayLayer) {
 	struct Fields {
@@ -77,6 +95,12 @@ class $modify(PlayLayer) {
 				else overlaySprite->setVisible(false);
 			}
 
+
+			GJBaseGameLayer* gameLayer = GJBaseGameLayer::get();
+			if (gameLayer->m_groundLayer && gameLayer->m_groundLayer) {
+				colorChildrenRecursive(gameLayer->m_groundLayer, randColor());
+				colorChildrenRecursive(gameLayer->m_groundLayer2, randColor());
+			}
 
 			CCSize winSize = CCDirector::sharedDirector()->getWinSize();
 			if (!blinking) {
