@@ -39,6 +39,20 @@ static ccHSVValue randColorHSV(float sat = 255, float bright = 255, float absSat
 	return hsv;
 }
 
+class $modify(CCSpriteHook, CCSprite) {
+	virtual void draw() {
+		if (getID() == "background") {
+			ccColor3B newColor = randColor();
+			setColor(newColor);
+			updateDisplayedColor(newColor);
+
+			CCNodeRGBA* node = (CCNodeRGBA*)this;
+			node->setColor(newColor);
+			node->updateDisplayedColor(newColor);
+		}
+		CCSprite::draw();
+	}
+};
 
 class $modify(PlayLayer) {
 	struct Fields {
