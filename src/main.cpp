@@ -39,31 +39,6 @@ static ccHSVValue randColorHSV(float sat = 255, float bright = 255, float absSat
 	return hsv;
 }
 
-#ifdef GEODE_IS_WINDOWS
-// This is only CONFIRMED to cause no problems on Windows. On Android it causes issues, idk about Mac.
-class $modify(CCSprite) {
-	virtual void draw() {
-		if (flashingEnabled && this != blinkingEye) {
-			if (overlaySprite) {
-				if (this == overlaySprite) {
-					CCSprite::draw();
-					return;
-				}
-			}
-
-			ccColor3B newColor = randColor();
-			setColor(newColor);
-			updateDisplayedColor(newColor);
-
-			CCNodeRGBA* node = (CCNodeRGBA*)this;
-			node->setColor(newColor);
-			node->updateDisplayedColor(newColor);
-		}
-		CCSprite::draw();
-
-	}
-};
-#endif
 
 class $modify(PlayLayer) {
 	struct Fields {
