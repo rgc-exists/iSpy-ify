@@ -88,8 +88,8 @@ class $modify(PlayLayer) {
 				CCNode* background = ground->getParent()->getChildByID("background");
 				CCSprite* backgroundSpr = dynamic_cast<CCSprite*>(background);
 				ccColor3B bgColor = randColor();
-				backgroundSpr->setColor(color);
-				backgroundSpr->updateDisplayedColor(color);
+				backgroundSpr->setColor(backgroundColot);
+				backgroundSpr->updateDisplayedColor(backgroundColor);
 			}
 
 			CCSize winSize = CCDirector::sharedDirector()->getWinSize();
