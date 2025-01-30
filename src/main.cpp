@@ -2,7 +2,6 @@
 
 using namespace geode::prelude;
 
-#include <Geode/modify/CCSprite.hpp>
 #include <Geode/modify/PlayLayer.hpp>
 #include <Geode/modify/GameObject.hpp>
 #include <Geode/modify/GJGroundLayer.hpp>
@@ -55,6 +54,25 @@ static void colorChildrenRecursive(CCNode* node, ccColor3B color) {
 		colorChildrenRecursive(childNode, color);
 	}
 }
+static void randomizeChildrenRecursive(CCNode* node) {
+	CCSprite* sprite = dynamic_cast<CCSprite*>(node);
+	if (sprite) {
+		ccColor3B color = randColor();
+		sprite->setColor(color);
+		sprite->updateDisplayedColor(color);
+	}
+
+	for (int c = 0; c < node->getChildrenCount(); c++) {
+		CCObject* child = node->getChildren()->objectAtIndex(c);
+		CCNode* childNode = (CCNode*)child;
+		randomizeChildrenRecursive(childNode);
+	}
+}
+static void randomizePlayer(PlayerObject* player) {
+	player->setColor(randColor());
+	player->setSecondColor(randColor());
+	player->setGlowColor(randColor());
+}
 
 class $modify(PlayLayer) {
 	struct Fields {
@@ -71,20 +89,21 @@ class $modify(PlayLayer) {
 	virtual void postUpdate(float p0) {
 		PlayLayer::postUpdate(p0);
 
-		PlayerObject* player = GJBaseGameLayer::get()->m_player1;
-		if (!player) return;
-		if (flashingEnabled && !m_isPaused && !player->m_isDead) {
+		GJBaseGameLayer* gameLayer = GJBaseGameLayer::get();
+		if (!gameLayer) return;
+		PlayerObject* player1 = gameLayer->m_player1;
+		if (!player1) return;
+		if (flashingEnabled && !m_isPaused && !player1->m_isDead) {
 			if (overlaySprite) {
 				if (eyeClosed) overlaySprite->setVisible(true);
 				else overlaySprite->setVisible(false);
 			}
 
 
-			GJBaseGameLayer* gameLayer = GJBaseGameLayer::get();
-			if (gameLayer->m_groundLayer && gameLayer->m_groundLayer) {
+			if (gameLayer->m_groundLayer && gameLayer->m_groundLayer2) {
 				colorChildrenRecursive(gameLayer->m_groundLayer, randColor());
 				colorChildrenRecursive(gameLayer->m_groundLayer2, randColor());
-				CCSprite* ground = (CCSprite*)gameLayer->m_groundLayer;
+				CCNode* ground = gameLayer->m_groundLayer;
 				CCNode* background = ground->getParent()->getChildByID("background");
 				if (background) {
 					CCSprite* backgroundSpr = dynamic_cast<CCSprite*>(background);
@@ -92,6 +111,10 @@ class $modify(PlayLayer) {
 					backgroundSpr->setColor(bgColor);
 					backgroundSpr->updateDisplayedColor(bgColor);
 				}
+
+				PlayerObject* player2 = gameLayer->m_player2;
+				if (player2) randomizePlayer(player2);
+				randomizePlayer(player1);
 			}
 
 			CCSize winSize = CCDirector::sharedDirector()->getWinSize();
