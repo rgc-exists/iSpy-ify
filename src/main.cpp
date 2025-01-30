@@ -89,22 +89,19 @@ class $modify(PlayLayer) {
 	virtual void postUpdate(float p0) {
 		PlayLayer::postUpdate(p0);
 
-		GJBaseGameLayer* gameLayer = GJBaseGameLayer::get();
-		if (!gameLayer) return;
-		PlayerObject* player1 = gameLayer->m_player1;
-		if (!player1) return;
-		if (flashingEnabled && !m_isPaused && !player1->m_isDead) {
+		if (!m_player1) return;
+		if (flashingEnabled && !m_isPaused && !m_player1->m_isDead) {
 			if (overlaySprite) {
 				if (eyeClosed) overlaySprite->setVisible(true);
 				else overlaySprite->setVisible(false);
 			}
 
 
-			if (gameLayer->m_groundLayer && gameLayer->m_groundLayer2) {
-				colorChildrenRecursive(gameLayer->m_groundLayer, randColor());
-				colorChildrenRecursive(gameLayer->m_groundLayer2, randColor());
-				CCNode* ground = gameLayer->m_groundLayer;
-				CCNode* background = ground->getParent()->getChildByID("background");
+			if (m_groundLayer && m_groundLayer2) {
+				colorChildrenRecursive(m_groundLayer, randColor());
+				colorChildrenRecursive(m_groundLayer2, randColor());
+				CCNode* ground = m_groundLayer;
+				CCNode* background = m_background;
 				if (background) {
 					CCSprite* backgroundSpr = dynamic_cast<CCSprite*>(background);
 					ccColor3B bgColor = randColor();
@@ -112,9 +109,8 @@ class $modify(PlayLayer) {
 					backgroundSpr->updateDisplayedColor(bgColor);
 				}
 
-				PlayerObject* player2 = gameLayer->m_player2;
-				if (player2) randomizePlayer(player2);
-				randomizePlayer(player1);
+				if (m_player2) randomizePlayer(m_player2);
+				randomizePlayer(m_player1);
 			}
 
 			CCSize winSize = CCDirector::sharedDirector()->getWinSize();
