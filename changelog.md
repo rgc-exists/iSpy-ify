@@ -1,3 +1,6 @@
+# 1.0.7
+- Remove CCSprite hook (internal change)
+
 # 1.0.6
 - Remove color flashing for menus, only have it for in-game objects.
 - Add color flashing for ground.  
