@@ -74,9 +74,10 @@ static void randomizePlayer(PlayerObject* player) {
 	player->setGlowColor(randColor());
 }
 
-class $modify(PlayLayer) {
+class $modify(PlayLayerHook, PlayLayer) {
 	struct Fields {
 		bool m_levelIsPlatformer;
+		bool m_updatedSchedule = false;
 	};
 
 	void resetBlinking() {
@@ -84,6 +85,26 @@ class $modify(PlayLayer) {
 		eyeClosed = false;
 		blinkingEye->removeFromParentAndCleanup(true);
 		blinkingTimer = rand() % 30 * 14 + 14;
+	}
+
+	void customUpdate(float dt) {
+		if (!m_player1) return;
+
+		if (m_groundLayer && m_groundLayer2) {
+			colorChildrenRecursive(m_groundLayer, randColor());
+			colorChildrenRecursive(m_groundLayer2, randColor());
+			CCNode* ground = m_groundLayer;
+			CCNode* background = m_background;
+			if (background) {
+				CCSprite* backgroundSpr = dynamic_cast<CCSprite*>(background);
+				ccColor3B bgColor = randColor();
+				backgroundSpr->setColor(bgColor);
+				backgroundSpr->updateDisplayedColor(bgColor);
+			}
+
+			if (m_player2) randomizePlayer(m_player2);
+			randomizePlayer(m_player1);
+		}
 	}
 
 	virtual void postUpdate(float p0) {
@@ -96,22 +117,6 @@ class $modify(PlayLayer) {
 				else overlaySprite->setVisible(false);
 			}
 
-
-			if (m_groundLayer && m_groundLayer2) {
-				colorChildrenRecursive(m_groundLayer, randColor());
-				colorChildrenRecursive(m_groundLayer2, randColor());
-				CCNode* ground = m_groundLayer;
-				CCNode* background = m_background;
-				if (background) {
-					CCSprite* backgroundSpr = dynamic_cast<CCSprite*>(background);
-					ccColor3B bgColor = randColor();
-					backgroundSpr->setColor(bgColor);
-					backgroundSpr->updateDisplayedColor(bgColor);
-				}
-
-				if (m_player2) randomizePlayer(m_player2);
-				randomizePlayer(m_player1);
-			}
 
 			CCSize winSize = CCDirector::sharedDirector()->getWinSize();
 			if (!blinking) {
@@ -156,7 +161,7 @@ class $modify(PlayLayer) {
 	void startGame() {
 		PlayLayer::startGame();
 
-		if (blinking) return;
+		if (blinking || !flashingEnabled) return;
 
 		blinkingEyeEnabled = !(Mod::get()->getSettingValue<bool>("blinking-eye-disabled"));
 
@@ -170,6 +175,11 @@ class $modify(PlayLayer) {
 		overlaySprite->setScaleY(winSize.height);
 		overlaySprite->setColor(ccc3(0, 0, 0));
 		overlaySprite->setVisible(false);
+
+		if (!m_fields->m_updatedSchedule) {
+			schedule(schedule_selector(PlayLayerHook::customUpdate), 0.0f);
+			m_fields->m_updatedSchedule = true;
+		}
 
 	}
 
