@@ -84,12 +84,14 @@ class $modify(PlayLayer) {
 			if (gameLayer->m_groundLayer && gameLayer->m_groundLayer) {
 				colorChildrenRecursive(gameLayer->m_groundLayer, randColor());
 				colorChildrenRecursive(gameLayer->m_groundLayer2, randColor());
-				CCSprite* ground = gameLayer->m_groundLayer;
+				CCSprite* ground = (CCSprite*)gameLayer->m_groundLayer;
 				CCNode* background = ground->getParent()->getChildByID("background");
-				CCSprite* backgroundSpr = dynamic_cast<CCSprite*>(background);
-				ccColor3B bgColor = randColor();
-				backgroundSpr->setColor(backgroundColot);
-				backgroundSpr->updateDisplayedColor(backgroundColor);
+				if (background) {
+					CCSprite* backgroundSpr = dynamic_cast<CCSprite*>(background);
+					ccColor3B bgColor = randColor();
+					backgroundSpr->setColor(bgColor);
+					backgroundSpr->updateDisplayedColor(bgColor);
+				}
 			}
 
 			CCSize winSize = CCDirector::sharedDirector()->getWinSize();
@@ -110,7 +112,6 @@ class $modify(PlayLayer) {
 			else if (eyeAppearing) {
 				float heightOffset = blinkingTimer + 21;
 				blinkingEye->setPosition(ccp(winSize.width * .75f, winSize.height * .75f + heightOffset * 6.5f));
-				log::debug("{}", heightOffset);
 				if (heightOffset < 0) {
 					eyeAppearing = false;
 					FMODAudioEngine::get()->playEffect("iSpy_Blinking.wav"_spr);
