@@ -40,32 +40,53 @@ static ccHSVValue randColorHSV(float sat = 255, float bright = 255, float absSat
 }
 
 
-static void colorChildrenRecursive(CCNode* node, ccColor3B color) {
-	CCSprite* sprite = dynamic_cast<CCSprite*>(node);
+static void colorGroundChildren(GJGroundLayer* layer, ccColor3B color) {
+	if (!layer) return;
 
-	if (sprite) {
-		sprite->setColor(color);
-		sprite->updateDisplayedColor(color);
+	if (layer->m_ground1Sprite) {
+		for (CCSprite* sprite : CCArrayExt<CCSprite*>(layer->m_ground1Sprite->getChildren())) {
+			sprite->setColor(color);
+			sprite->updateDisplayedColor(color);
+		}
 	}
 
-	for (int c = 0; c < node->getChildrenCount(); c++) {
-		CCObject* child = node->getChildren()->objectAtIndex(c);
-		CCNode* childNode = (CCNode*)child;
-		colorChildrenRecursive(childNode, color);
+	if (layer->m_ground2Sprite) {
+		for (CCSprite* sprite : CCArrayExt<CCSprite*>(layer->m_ground2Sprite->getChildren())) {
+			sprite->setColor(color);
+			sprite->updateDisplayedColor(color);
+		}
+	}
+
+	if (layer->m_lineSprite) {
+		layer->m_lineSprite->setColor(color);
+		layer->m_lineSprite->updateDisplayedColor(color);
+	}
+
+	if (auto leftShadow = static_cast<CCSprite*>(layer->getChildByTag(0))) {
+		leftShadow->setColor(color);
+		leftShadow->updateDisplayedColor(color);
+	}
+
+	if (auto rightShadow = static_cast<CCSprite*>(layer->getChildByTag(1))) {
+		rightShadow->setColor(color);
+		rightShadow->updateDisplayedColor(color);
 	}
 }
-static void randomizeChildrenRecursive(CCNode* node) {
-	CCSprite* sprite = dynamic_cast<CCSprite*>(node);
-	if (sprite) {
-		ccColor3B color = randColor();
-		sprite->setColor(color);
-		sprite->updateDisplayedColor(color);
+static void colorMGChildren(GJMGLayer* layer, ccColor3B color) {
+	if (!layer) return;
+
+	if (layer->m_ground1Sprite) {
+		for (CCSprite* sprite : CCArrayExt<CCSprite*>(layer->m_ground1Sprite->getChildren())) {
+			sprite->setColor(color);
+			sprite->updateDisplayedColor(color);
+		}
 	}
 
-	for (int c = 0; c < node->getChildrenCount(); c++) {
-		CCObject* child = node->getChildren()->objectAtIndex(c);
-		CCNode* childNode = (CCNode*)child;
-		randomizeChildrenRecursive(childNode);
+	if (layer->m_ground2Sprite) {
+		for (CCSprite* sprite : CCArrayExt<CCSprite*>(layer->m_ground2Sprite->getChildren())) {
+			sprite->setColor(color);
+			sprite->updateDisplayedColor(color);
+		}
 	}
 }
 static void randomizePlayer(PlayerObject* player) {
@@ -91,15 +112,13 @@ class $modify(PlayLayerHook, PlayLayer) {
 		if (!m_player1) return;
 
 		if (m_groundLayer && m_groundLayer2) {
-			colorChildrenRecursive(m_groundLayer, randColor());
-			colorChildrenRecursive(m_groundLayer2, randColor());
-			CCNode* ground = m_groundLayer;
-			CCNode* background = m_background;
-			if (background) {
-				CCSprite* backgroundSpr = dynamic_cast<CCSprite*>(background);
+			colorGroundChildren(m_groundLayer, randColor());
+			colorGroundChildren(m_groundLayer2, randColor());
+			colorMGChildren(m_middleground, randColor());
+			if (m_background) {
 				ccColor3B bgColor = randColor();
-				backgroundSpr->setColor(bgColor);
-				backgroundSpr->updateDisplayedColor(bgColor);
+				m_background->setColor(bgColor);
+				m_background->updateDisplayedColor(bgColor);
 			}
 
 			if (m_player2) randomizePlayer(m_player2);
